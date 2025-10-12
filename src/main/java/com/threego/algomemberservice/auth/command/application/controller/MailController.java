@@ -1,6 +1,7 @@
 package com.threego.algomemberservice.auth.command.application.controller;
 
 import com.threego.algomemberservice.auth.command.application.service.MailService;
+import com.threego.algomemberservice.auth.command.application.service.RedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Tag(
         name = "Auth - Mail",
@@ -20,10 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MailController {
 
     private final MailService mailService;
-    private final Map<String, Integer> numberMap = new ConcurrentHashMap<>();
+    private final RedisService redisService;
 
-    public MailController(MailService mailService) {
+    public MailController(MailService mailService, RedisService redisService) {
         this.mailService = mailService;
+        this.redisService = redisService;
     }
 
     @Operation(
@@ -39,7 +39,8 @@ public class MailController {
 
         try {
             int number = mailService.sendMail(mail);
-            numberMap.put(mail, number);
+            redisService.setDataExpire(mail, String.valueOf(number), 60);
+            map.put(mail, number);
 
             map.put("success", true);
         } catch (Exception e) {
@@ -61,13 +62,7 @@ public class MailController {
             @Parameter(description = "사용자가 입력한 인증번호", required = true)
             @RequestParam String userNumber
     ) {
-        Integer correctNumber = numberMap.get(mail);
-        boolean isMatch = correctNumber != null && userNumber.equals(String.valueOf(correctNumber));
-
-        if(isMatch) {
-            numberMap.remove(mail);
-        }
-
+        boolean isMatch = redisService.checkData(mail, userNumber);
         return ResponseEntity.ok(isMatch);
     }
 }
