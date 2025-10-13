@@ -39,7 +39,7 @@ public class MailController {
 
         try {
             int number = mailService.sendMail(mail);
-            redisService.setDataExpire(mail, String.valueOf(number), 60);
+            redisService.setDataExpire(mail, String.valueOf(number), 3);
             map.put(mail, number);
 
             map.put("success", true);
@@ -60,9 +60,9 @@ public class MailController {
             @Parameter(description = "사용자 이메일", required = true)
             @RequestParam String mail,
             @Parameter(description = "사용자가 입력한 인증번호", required = true)
-            @RequestParam String userNumber
+            @RequestParam String code
     ) {
-        boolean isMatch = redisService.checkData(mail, userNumber);
+        boolean isMatch = redisService.checkData(mail, code);
         return ResponseEntity.ok(isMatch);
     }
 }
