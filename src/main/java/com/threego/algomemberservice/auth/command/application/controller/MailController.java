@@ -42,12 +42,13 @@ public class MailController {
             String email = req.getEmail();
             int number = mailService.sendMail(email);
             redisService.setDataExpire(email, String.valueOf(number), 3);
-            map.put(email, number);
-
             map.put("success", true);
+            map.put("email", email);
+            map.put("code", String.valueOf(number));
+
         } catch (Exception e) {
             map.put("success", false);
-            map.put("error", "이메일 인증에 실패하였습니다.");
+            map.put("message", "이메일 인증에 실패하였습니다.");
         }
 
         return map;
