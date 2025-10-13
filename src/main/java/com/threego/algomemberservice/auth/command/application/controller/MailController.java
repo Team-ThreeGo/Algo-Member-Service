@@ -1,5 +1,6 @@
 package com.threego.algomemberservice.auth.command.application.controller;
 
+import com.threego.algomemberservice.auth.command.application.dto.RequestCodeDTO;
 import com.threego.algomemberservice.auth.command.application.service.MailService;
 import com.threego.algomemberservice.auth.command.application.service.RedisService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,19 +34,20 @@ public class MailController {
     @PostMapping("/email")
     public HashMap<String, Object> mailSend(
             @Parameter(description = "인증번호를 받을 이메일 주소", required = true)
-            @RequestParam String mail
-    ) {
+            @RequestBody RequestCodeDTO req
+            ) {
         HashMap<String, Object> map = new HashMap<>();
 
         try {
-            int number = mailService.sendMail(mail);
-            redisService.setDataExpire(mail, String.valueOf(number), 3);
-            map.put(mail, number);
+            String email = req.getEmail();
+            int number = mailService.sendMail(email);
+            redisService.setDataExpire(email, String.valueOf(number), 3);
+            map.put(email, number);
 
             map.put("success", true);
         } catch (Exception e) {
             map.put("success", false);
-            map.put("error", e.getMessage());
+            map.put("error", "이메일 인증에 실패하였습니다.");
         }
 
         return map;
