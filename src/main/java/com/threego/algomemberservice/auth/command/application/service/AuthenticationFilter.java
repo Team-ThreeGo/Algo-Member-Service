@@ -2,6 +2,7 @@ package com.threego.algomemberservice.auth.command.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threego.algomemberservice.auth.command.application.dto.RequestLoginDTO;
+import com.threego.algomemberservice.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,6 +19,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -48,14 +50,25 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String id = ((User)authResult.getPrincipal()).getUsername();
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult)
+            throws IOException, ServletException {
+
+        CustomUserDetails userDetails = (CustomUserDetails) authResult.getPrincipal();
+
+        Integer memberId = userDetails.getMemberId();
+        String email = userDetails.getUsername();
+        String nickname = userDetails.getNickname();
         List<String> roles = authResult.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        Claims claims = Jwts.claims().setSubject(id);
-        claims.put("auth", roles);
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("memberId", memberId);
+        claims.put("nickname", nickname);
+        claims.put("role", roles.isEmpty() ? "ROLE_MEMBER" : roles.get(0));
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -65,5 +78,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         response.addHeader("token", token);
+        response.addHeader("memberId", String.valueOf(memberId));
+        response.addHeader("email", email);
+        response.addHeader("nickname", nickname);
     }
 }
