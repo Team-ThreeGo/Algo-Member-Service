@@ -1,5 +1,7 @@
 package com.threego.algomemberservice.member.command.application.service;
 
+import com.threego.algomemberservice.common.error.ErrorCode;
+import com.threego.algomemberservice.common.error.exception.EntityNotFoundException;
 import com.threego.algomemberservice.common.util.DateTimeUtils;
 import com.threego.algomemberservice.member.command.domain.aggregate.Member;
 import com.threego.algomemberservice.member.command.domain.aggregate.MemberAttendanceHistory;
@@ -24,7 +26,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     public void updateMemberInfo(int memberId, String newNickname) {
         Member member =  memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
         member.setNickname(newNickname);
         memberRepository.save(member);
