@@ -13,4 +13,5 @@ public class LoginUserResponseDTO {
     private int id;
     private String email;
     private String password;
+    private String nickname;
 }

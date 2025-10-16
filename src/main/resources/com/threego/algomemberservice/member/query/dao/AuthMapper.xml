@@ -9,6 +9,7 @@
                A.ID
              , A.EMAIL
              , A.PASSWORD
+             , A.NICKNAME
           FROM MEMBER A
          WHERE EMAIL = #{email}
     </select>
