@@ -71,6 +71,7 @@ dependencies {
 
     /* E-Mail */
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     /* Eureka client */
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
