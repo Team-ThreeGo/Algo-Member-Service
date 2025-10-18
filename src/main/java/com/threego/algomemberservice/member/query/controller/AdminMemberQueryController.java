@@ -1,15 +1,14 @@
 package com.threego.algomemberservice.member.query.controller;
 
+import com.threego.algomemberservice.common.dto.PagedResponseDTO;
 import com.threego.algomemberservice.member.query.dto.AdminMemberDetailResponseDTO;
+import com.threego.algomemberservice.member.query.dto.AdminMemberSearchDTO;
 import com.threego.algomemberservice.member.query.service.AdminMemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,7 +42,9 @@ public class AdminMemberQueryController {
             description = "관리자는 모든 회원의 목록을 조회할 수 있다."
     )
     @GetMapping("/info")
-    public ResponseEntity<List<AdminMemberDetailResponseDTO>>findMemberList(){
-        return ResponseEntity.ok(adminMemberQueryService.findMemberList());
+    public ResponseEntity<PagedResponseDTO<AdminMemberDetailResponseDTO>> findMemberList(
+            @ModelAttribute AdminMemberSearchDTO searchDTO
+    ) {
+        return ResponseEntity.ok(adminMemberQueryService.findMemberList(searchDTO));
     }
 }
