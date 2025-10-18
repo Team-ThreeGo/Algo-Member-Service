@@ -3,6 +3,7 @@ package com.threego.algomemberservice.member.command.application.service;
 import com.threego.algomemberservice.common.error.ErrorCode;
 import com.threego.algomemberservice.common.error.exception.EntityNotFoundException;
 import com.threego.algomemberservice.common.util.DateTimeUtils;
+import com.threego.algomemberservice.member.aop.IncreasePoint;
 import com.threego.algomemberservice.member.command.domain.aggregate.Member;
 import com.threego.algomemberservice.member.command.domain.aggregate.MemberAttendanceHistory;
 import com.threego.algomemberservice.member.command.domain.repository.MemberAttendanceHistoryCommandRepository;
@@ -15,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberCommandRepository memberRepository;
     private final MemberAttendanceHistoryCommandRepository attendanceRepository;
+    private final IncreasePoint increasePoint;
 
     public MemberCommandServiceImpl(MemberCommandRepository memberCommandRepository,
-                                    MemberAttendanceHistoryCommandRepository attendanceRepository) {
+                                    MemberAttendanceHistoryCommandRepository attendanceRepository, IncreasePoint increasePoint) {
         this.memberRepository = memberCommandRepository;
         this.attendanceRepository = attendanceRepository;
+        this.increasePoint = increasePoint;
     }
 
     @Transactional
@@ -33,6 +36,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Transactional
+    @IncreasePoint(amount = 1)
     public String createAttendance(int memberId) {
         String today = DateTimeUtils.nowDate();
 
