@@ -8,22 +8,16 @@ import com.threego.algomemberservice.member.command.domain.aggregate.Member;
 import com.threego.algomemberservice.member.command.domain.aggregate.MemberAttendanceHistory;
 import com.threego.algomemberservice.member.command.domain.repository.MemberAttendanceHistoryCommandRepository;
 import com.threego.algomemberservice.member.command.domain.repository.MemberCommandRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberCommandRepository memberRepository;
     private final MemberAttendanceHistoryCommandRepository attendanceRepository;
-    private final IncreasePoint increasePoint;
-
-    public MemberCommandServiceImpl(MemberCommandRepository memberCommandRepository,
-                                    MemberAttendanceHistoryCommandRepository attendanceRepository, IncreasePoint increasePoint) {
-        this.memberRepository = memberCommandRepository;
-        this.attendanceRepository = attendanceRepository;
-        this.increasePoint = increasePoint;
-    }
 
     @Transactional
     @Override
