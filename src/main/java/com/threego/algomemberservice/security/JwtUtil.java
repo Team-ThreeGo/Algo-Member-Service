@@ -58,11 +58,11 @@ public class JwtUtil {
         UserDetails userDetails = authService.loadUserByUsername(claims.getSubject());
 
         Collection<GrantedAuthority> authorities = null;
-        if(claims.get("auth") == null) {
+        if(claims.get("role") == null) {
             throw new RuntimeException("토큰에 권한이 없습니다.");
         } else {
             authorities =
-                    Arrays.stream(claims.get("auth").toString()
+                    Arrays.stream(claims.get("role").toString()
                                     .replace("[", "")
                                     .replace("]", "")
                                     .split(", "))

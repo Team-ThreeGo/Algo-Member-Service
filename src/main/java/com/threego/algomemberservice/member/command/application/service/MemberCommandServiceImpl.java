@@ -3,24 +3,21 @@ package com.threego.algomemberservice.member.command.application.service;
 import com.threego.algomemberservice.common.error.ErrorCode;
 import com.threego.algomemberservice.common.error.exception.EntityNotFoundException;
 import com.threego.algomemberservice.common.util.DateTimeUtils;
+import com.threego.algomemberservice.member.aop.IncreasePoint;
 import com.threego.algomemberservice.member.command.domain.aggregate.Member;
 import com.threego.algomemberservice.member.command.domain.aggregate.MemberAttendanceHistory;
 import com.threego.algomemberservice.member.command.domain.repository.MemberAttendanceHistoryCommandRepository;
 import com.threego.algomemberservice.member.command.domain.repository.MemberCommandRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberCommandRepository memberRepository;
     private final MemberAttendanceHistoryCommandRepository attendanceRepository;
-
-    public MemberCommandServiceImpl(MemberCommandRepository memberCommandRepository,
-                                    MemberAttendanceHistoryCommandRepository attendanceRepository) {
-        this.memberRepository = memberCommandRepository;
-        this.attendanceRepository = attendanceRepository;
-    }
 
     @Transactional
     @Override
@@ -33,6 +30,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Transactional
+    @IncreasePoint(amount = 1)
     public String createAttendance(int memberId) {
         String today = DateTimeUtils.nowDate();
 

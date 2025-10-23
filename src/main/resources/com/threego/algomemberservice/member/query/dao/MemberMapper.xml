@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.threego.algomemberservice.member.query.dao.MemberMapper">
+
     <!-- 회원: 정보 조회 -->
     <select id="selectMemberById" resultType="com.threego.algomemberservice.member.query.dto.MemberDetailResponseDTO">
         SELECT
@@ -42,6 +43,10 @@
     <!-- 관리자: 전체 회원 목록 조회 -->
     <select id="selectAllMemberDetails"
             resultType="com.threego.algomemberservice.member.query.dto.AdminMemberDetailResponseDTO">
+        <!-- offset 자동 계산 -->
+        <include refid="com.threego.algomemberservice.common.mapper.CommonMapper.calculateOffset"/>
+
+
         SELECT
                A.ID
              , A.EMAIL
@@ -56,7 +61,41 @@
           JOIN MEMBER_RANK B ON A.RANK_ID = B.ID
           JOIN MEMBER_ROLE C ON A.ID = C.MEMBER_ID
           JOIN ROLE D ON C.ROLE_ID = D.ID
+        <where>
+        <if test="keyword != null and keyword != ''">
+            AND (A.EMAIL LIKE CONCAT('%', #{keyword}, '%')
+            OR A.NICKNAME LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="status != null and status != ''">
+            AND A.STATUS = #{status}
+        </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="sortBy != null and sortDirection != null">
+                ${sortBy} ${sortDirection}
+            </when>
+            <otherwise>
+                A.CREATED_AT DESC
+            </otherwise>
+        </choose>
+        <include refid="com.threego.algomemberservice.common.mapper.CommonMapper.pagination"/>
     </select>
 
-
+    <!-- 총 회원 수 -->
+    <select id="countAllMembers" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER A
+        JOIN MEMBER_ROLE C ON A.ID = C.MEMBER_ID
+        JOIN ROLE D ON C.ROLE_ID = D.ID
+    <where>
+        <if test="keyword != null and keyword != ''">
+            AND (A.EMAIL LIKE CONCAT('%', #{keyword}, '%')
+            OR A.NICKNAME LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="status != null and status != ''">
+            AND A.STATUS = #{status}
+        </if>
+    </where>
+    </select>
 </mapper>
