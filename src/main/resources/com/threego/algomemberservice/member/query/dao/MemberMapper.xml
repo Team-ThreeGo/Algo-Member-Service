@@ -10,13 +10,13 @@
                A.ID
              , A.EMAIL
              , A.NICKNAME
-             , B.NAME AS RANK
+             , B.NAME AS RANKNAME
              , A.POINT
              , COUNT(C.ATTEND_AT) AS ATTENDANCECOUNT
              , A.CREATED_AT AS CREATEDAT
           FROM MEMBER A
           JOIN MEMBER_RANK B ON A.RANK_ID = B.ID
-          JOIN MEMBER_ATTENDANCE_HISTORY C ON A.ID = C.MEMBER_ID
+          LEFT JOIN MEMBER_ATTENDANCE_HISTORY C ON A.ID = C.MEMBER_ID
          WHERE A.ID = #{id}
     </select>
 
@@ -27,7 +27,7 @@
                A.ID
              , A.EMAIL
              , A.NICKNAME
-             , B.NAME AS RANK
+             , B.NAME AS RANKNAME
              , D.NAME AS ROLE
              , A.POINT
              , A.REPORTED_COUNT AS REPORTEDCOUNT
