@@ -1,6 +1,7 @@
 package com.threego.algomemberservice.member.query.controller;
 
 import com.threego.algomemberservice.member.query.dto.MemberDetailResponseDTO;
+import com.threego.algomemberservice.member.query.dto.MemberInfoResponseDTO;
 import com.threego.algomemberservice.member.query.dto.PostSummaryResponseDto;
 import com.threego.algomemberservice.member.query.service.MemberQueryService;
 import com.threego.algomemberservice.security.CustomUserDetails;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,12 +41,12 @@ public class MemberQueryController {
     }
 
     @Operation(
-            summary = "회원 등급 조회",
-            description = "id를 통해 회원 등급을 조회할 수 있습니다."
+            summary = "회원 닉네임 및 등급 조회",
+            description = "id를 통해 회원 닉네임 및 등급을 조회할 수 있습니다."
     )
     @GetMapping("/rank")
-    public ResponseEntity<String> findRankNameById(@AuthenticationPrincipal final CustomUserDetails userDetails) {
-        return ResponseEntity.ok(memberQueryService.findRankNameById(userDetails.getMemberId()));
+    public ResponseEntity<MemberInfoResponseDTO> findNickNameAndRankNameById(@AuthenticationPrincipal final CustomUserDetails userDetails) {
+        return ResponseEntity.ok(memberQueryService.findNickNameAndRankNameById(userDetails.getMemberId()));
     }
 
     @GetMapping("/me/career-posts")

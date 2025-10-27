@@ -82,9 +82,10 @@
         <include refid="com.threego.algomemberservice.common.mapper.CommonMapper.pagination"/>
     </select>
 
-    <select id="findRankNameById" parameterType="_int" resultType="string">
+    <select id="findNickNameAndRankNameById" resultType="com.threego.algomemberservice.member.query.dto.MemberInfoResponseDTO">
         SELECT
-               B.NAME
+               B.NAME AS RANKNAME
+             , A.NICKNAME
           FROM MEMBER A
           JOIN MEMBER_RANK B
             ON A.RANK_ID = B.ID
