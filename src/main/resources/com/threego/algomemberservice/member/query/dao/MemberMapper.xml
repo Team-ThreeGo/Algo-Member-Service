@@ -82,6 +82,15 @@
         <include refid="com.threego.algomemberservice.common.mapper.CommonMapper.pagination"/>
     </select>
 
+    <select id="findRankNameById" parameterType="_int" resultType="string">
+        SELECT
+               B.NAME
+          FROM MEMBER A
+          JOIN MEMBER_RANK B
+            ON A.RANK_ID = B.ID
+         WHERE A.ID = #{memberId};
+    </select>
+
     <!-- 총 회원 수 -->
     <select id="countAllMembers" resultType="int">
         SELECT COUNT(*)

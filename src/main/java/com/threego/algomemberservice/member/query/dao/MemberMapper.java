@@ -20,4 +20,6 @@ public interface MemberMapper {
 
     List<AdminMemberDetailResponseDTO> selectAllMemberDetails(AdminMemberSearchDTO searchDTO);
     int countAllMembers(AdminMemberSearchDTO searchDTO);
+
+    String findRankNameById(@Param("memberId") final int memberId);
 }

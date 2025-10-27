@@ -36,8 +36,17 @@ public class MemberQueryController {
     @GetMapping("/{id}/info")
     public ResponseEntity<MemberDetailResponseDTO> findMemberById(
             @PathVariable int id
-    ){
+    ) {
         return ResponseEntity.ok(memberQueryService.findMemberById(id));
+    }
+
+    @Operation(
+            summary = "회원 등급 조회",
+            description = "id를 통해 회원 등급을 조회할 수 있습니다."
+    )
+    @GetMapping("/rank")
+    public ResponseEntity<String> findRankNameById(@AuthenticationPrincipal final CustomUserDetails userDetails) {
+        return ResponseEntity.ok(memberQueryService.findRankNameById(userDetails.getMemberId()));
     }
 
     @GetMapping("/me/career-posts")

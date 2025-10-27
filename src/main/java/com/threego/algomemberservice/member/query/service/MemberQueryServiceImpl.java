@@ -31,4 +31,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     public List<PostSummaryResponseDto> getMyPosts(int memberId) {
         return careerInfoClient.getPostsByMember(memberId);
     }
+
+    @Override
+    public String findRankNameById(final int memberId) {
+        return memberMapper.findRankNameById(memberId);
+    }
 }

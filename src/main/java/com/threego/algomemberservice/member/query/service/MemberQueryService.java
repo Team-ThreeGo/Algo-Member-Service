@@ -9,4 +9,6 @@ public interface MemberQueryService {
     MemberDetailResponseDTO findMemberById (int id);
 
     List<PostSummaryResponseDto> getMyPosts(int memberId);
+
+    String findRankNameById(final int memberId);
 }
