@@ -2,6 +2,7 @@ package com.threego.algomemberservice.member.query.service;
 
 import com.threego.algomemberservice.member.query.dao.MemberMapper;
 import com.threego.algomemberservice.member.query.dto.MemberDetailResponseDTO;
+import com.threego.algomemberservice.member.query.dto.MemberInfoResponseDTO;
 import com.threego.algomemberservice.member.query.dto.PostSummaryResponseDto;
 import com.threego.algomemberservice.member.query.infrastructure.CareerInfoClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     }
 
     @Override
-    public String findRankNameById(final int memberId) {
-        return memberMapper.findRankNameById(memberId);
+    public MemberInfoResponseDTO findNickNameAndRankNameById(final int memberId) {
+        return memberMapper.findNickNameAndRankNameById(memberId);
     }
 }

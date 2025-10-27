@@ -3,6 +3,7 @@ package com.threego.algomemberservice.member.query.dao;
 import com.threego.algomemberservice.member.query.dto.AdminMemberDetailResponseDTO;
 import com.threego.algomemberservice.member.query.dto.MemberDetailResponseDTO;
 import com.threego.algomemberservice.member.query.dto.AdminMemberSearchDTO;
+import com.threego.algomemberservice.member.query.dto.MemberInfoResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,5 +22,5 @@ public interface MemberMapper {
     List<AdminMemberDetailResponseDTO> selectAllMemberDetails(AdminMemberSearchDTO searchDTO);
     int countAllMembers(AdminMemberSearchDTO searchDTO);
 
-    String findRankNameById(@Param("memberId") final int memberId);
+    MemberInfoResponseDTO findNickNameAndRankNameById(@Param("memberId") final int memberId);
 }
