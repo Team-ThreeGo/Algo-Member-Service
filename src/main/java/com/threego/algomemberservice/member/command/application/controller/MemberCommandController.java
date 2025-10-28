@@ -55,8 +55,9 @@ public class MemberCommandController {
             @ApiResponse(responseCode = "200", description = "출석 성공"),
             @ApiResponse(responseCode = "409", description = "오늘 날짜의 출석 데이터 존재")
     })
-    @PostMapping("/{memberId}/attendance")
-    public ResponseEntity<String> createMemberAttendance(@PathVariable int memberId) {
+    @PostMapping("/attendance")
+    public ResponseEntity<String> createMemberAttendance(
+            @RequestHeader("Member-Id") int memberId) {
         try {
             String date = memberService.createAttendance(memberId);
             return ResponseEntity.ok(date + " 출석 완료");
