@@ -16,8 +16,9 @@
              , A.CREATED_AT AS CREATEDAT
           FROM MEMBER A
           JOIN MEMBER_RANK B ON A.RANK_ID = B.ID
-          JOIN MEMBER_ATTENDANCE_HISTORY C ON A.ID = C.MEMBER_ID
+          LEFT JOIN MEMBER_ATTENDANCE_HISTORY C ON A.ID = C.MEMBER_ID
          WHERE A.ID = #{id}
+         GROUP BY A.ID, A.EMAIL, A.NICKNAME, B.NAME, A.POINT, A.CREATED_AT
     </select>
 
     <!-- 관리자: 특정 회원 목록 조회 -->
