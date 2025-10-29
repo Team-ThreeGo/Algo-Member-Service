@@ -41,6 +41,15 @@ public class MemberQueryController {
     }
 
     @Operation(
+            summary = "로그인한 회원의 전체 정보 조회",
+            description = "로그인한 회원의 모든 정보를 조회할 수 있습니다."
+    )
+    @GetMapping("/me")
+    public ResponseEntity<MemberDetailResponseDTO> getMyInfo(@AuthenticationPrincipal final CustomUserDetails userDetails) {
+        return ResponseEntity.ok(memberQueryService.findMemberById(userDetails.getMemberId()));
+    }
+
+    @Operation(
             summary = "회원 닉네임 및 등급 조회",
             description = "id를 통해 회원 닉네임 및 등급을 조회할 수 있습니다."
     )
